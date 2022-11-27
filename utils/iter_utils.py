@@ -1,28 +1,16 @@
-# from typing import Callable
+from typing import Callable
 
-# def iterate(map: Callable, r, x0=[], n=0) -> list:
 
-#     assert isinstance(r, (list, int, float)), 'r must be of type list, int or float'
-#     assert isinstance(x0, (list, int, float)), 'x0 must be of type list, int or float'
+def iterate(map: Callable, P: dict, V: dict=None, n=0) -> dict:
 
-#     # make sure r and x0 are in array
-#     r_list = [r] if isinstance(r, (int, float)) else r
-#     x0_list = [x0] if isinstance(x0, (int, float)) else x0
-    
-#     trajectories = []
-#     for r in r_list:
-#         for x0 in x0_list:
-#             trajectory = [x0]
-#             x = x0
-#             for i in range(n):
-#                 x = map(r, x)
-#                 trajectory.append(x)
-#             t = (trajectory, r, n)
-#             trajectories.append(t)
-
-#     if len(trajectories)==0:
-#         return ([], r, 0)
-#     elif len(trajectories)==1:
-#         return trajectories[0]
-#     else:
-#         return trajectories
+    if not V or n<1:
+        return {}    
+    else:
+        # init trajectories with start value at t=0
+        trajectories = { key: [value] for key, value in V.items()}
+        for _ in range(n-1):
+            V_hat = map(P, V)
+            for key, value in V_hat.items():
+                trajectories[key].append(value)
+            V = V_hat
+        return trajectories

@@ -3,48 +3,18 @@
 from typing import Callable
 
 
-def logistic_map(r, x):
-    """The logistic map models the evolution of a population,
-    by mapping the current population size `x_t` to the next `x_t+1`$,
-    taking into account both reproduction rate `r` and density-dependent mortality or starvation `(x-1)`,
+def logistic_map(P: dict, V: dict) -> dict:
+    """The implementation of a relative population system with:
+    -  parameters `P: ['r'] and,
+    -  variables `V: ['x']`,
+    that maps to the output variable v_hat['x']`
+    """
+    r = P['r']  # reproduction rate
+    x = V['x']  # relative population size
 
-    Parameters:
-    r : the reproduction rate
-    x : the current relative population size
+    x_hat = r * x * (1 - x)
 
-    Returns:
-    float: the relative population size after a discrete time step
-
-   """
-    return r * x * (1 - x)
-
-
-def iterate(map: Callable, r, x0=[], n=0) -> list:
-
-    assert isinstance(r, (list, int, float)), 'r must be of type list, int or float'
-    assert isinstance(x0, (list, int, float)), 'x0 must be of type list, int or float'
-
-    # make sure r and x0 are in array
-    r_list = [r] if isinstance(r, (int, float)) else r
-    x0_list = [x0] if isinstance(x0, (int, float)) else x0
-    
-    trajectories = []
-    for r in r_list:
-        for x0 in x0_list:
-            trajectory = [x0]
-            x = x0
-            for i in range(n):
-                x = map(r, x)
-                trajectory.append(x)
-            t = (trajectory, r, n)
-            trajectories.append(t)
-
-    if len(trajectories)==0:
-        return ([], r, 0)
-    elif len(trajectories)==1:
-        return trajectories[0]
-    else:
-        return trajectories
+    return {'x': x_hat}
 
 
 #rename to convergence
