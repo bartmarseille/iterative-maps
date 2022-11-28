@@ -6,8 +6,8 @@ The basic idea of a `iterated map` is to take a number $x_0$ for $t=0$, the `ini
 
 ## Iterative map framework
 
-In this project a [general framework](0.Map-iterate-plot-framework.ipynb) for defining, analyzing and visualizing iterable maps is presented.
+In this project a [general framework](0.%20Map-iterate-plot%20framework.ipynb) for defining, analyzing and visualizing iterable maps is presented.
 
 ## Logistic map and chaos
 
-Also, an in-depth analysis of the properties of the [logistic map](1.Logistic-map-and-chaos.ipynb) is included to show the framework in action.
+Also, an in-depth analysis of the properties of the [logistic map](1.%20Logistic-map%20and%20chaos.ipynb) is included to show the framework in action.
