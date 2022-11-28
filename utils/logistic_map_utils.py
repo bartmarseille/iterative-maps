@@ -17,8 +17,7 @@ def logistic_map(P: dict, V: dict) -> dict:
     return {'x': x_hat}
 
 
-#rename to convergence
-def get_fixed_points(r, n_equilibration_steps=1000, n_sampling_steps=100, epsilon=0.0001, verbose=False):
+def logistic_map_fixed_points(P, n_equilibration_steps=1000, n_sampling_steps=100, epsilon=0.0001, verbose=False):
     """Dependng on the paramenter `r`, the variable `x` of the logistic map converges to:
     - a stable fixed point
     - periodic oscillations between 4 values, 8, 16, 32
@@ -26,7 +25,7 @@ def get_fixed_points(r, n_equilibration_steps=1000, n_sampling_steps=100, epsilo
     will converge to one or a small number of stable oscillations.
 
     Parameters:
-    r : the reproduction rate
+    P : with P['r'] as the reproduction rate
     n_equilibration_steps : number of steps to take before looking for fixed points / limit-cycles (default=1000)
     n_sampling_steps: number of steps used looking for fixed points / limit-cycles (default 100)
     epsilon: floating-point precision threshold for equivalence
@@ -40,6 +39,7 @@ def get_fixed_points(r, n_equilibration_steps=1000, n_sampling_steps=100, epsilo
     """
     fixed_points = []
 
+    r = P['r']
     if r < 1:
         fixed_points =  [0.0]  
     elif r < 3:
@@ -48,15 +48,17 @@ def get_fixed_points(r, n_equilibration_steps=1000, n_sampling_steps=100, epsilo
         # hardcoded as convergence is is dramatically slow
         fixed_points = [0.6623452662682413]
     else:  # Periodic or chaotic
-        x = 0.5 
+        x = 0.5
+        V = {'x': x}
 
         # First, we run 1000 iteration to give the system a chance to settle
         for i in range(n_equilibration_steps):
-            x = logistic_map(r, x)
+            V = logistic_map(P, V)
 
         # Determine number of unique points we encounter in the subsequent `n_sampling_steps`
         for i in range(n_sampling_steps):
-            x = logistic_map(r, x)
+            V = logistic_map(P, V)
+            x = V['x']
 
             # Check whether, up to numerical accuracy, our new $x$ is already in this array.
             x_in_fixed_points = False
