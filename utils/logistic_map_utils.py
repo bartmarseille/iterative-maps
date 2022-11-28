@@ -1,6 +1,3 @@
-# import numpy as np
-
-from typing import Callable
 
 
 def logistic_map(P: dict, V: dict) -> dict:
