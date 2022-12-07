@@ -1,21 +1,30 @@
+import numpy as np
 
+# def logistic_map(P: dict, V: dict) -> dict:
+#     """The implementation of a relative population system with:
+#     -  parameters `P: ['r'] and,
+#     -  variables `V: ['x']`,
+#     that maps to the output variable v_hat['x']`
+#     """
+#     r = P['r']  # reproduction rate
+#     x = V['x']  # relative population size
 
-def logistic_map(P: dict, V: dict) -> dict:
+#     x_hat = r * x * (1 - x)
+
+#     return {'x': x_hat}
+def logistic_map(V: np.ndarray, r=3.0) -> np.ndarray:
     """The implementation of a relative population system with:
-    -  parameters `P: ['r'] and,
-    -  variables `V: ['x']`,
-    that maps to the output variable v_hat['x']`
+    -  variables `V`,
+    -  r: reproduction parameter
+    that maps to the output `V_dot` of the same type as variable `V`
     """
-    r = P['r']  # reproduction rate
-    x = V['x']  # relative population size
-
-    x_hat = r * x * (1 - x)
-
-    return {'x': x_hat}
+    
+    x = V    # relative population size
+    return r * x * (1 - x)
 
 
 def logistic_map_fixed_points(P, n_equilibration_steps=1000, n_sampling_steps=100, epsilon=0.0001, verbose=False):
-    """Dependng on the paramenter `r`, the variable `x` of the logistic map converges to:
+    """Depending on the paramenter `r`, the variable `x` of the logistic map converges to:
     - a stable fixed point
     - periodic oscillations between 4 values, 8, 16, 32
     - more complex regimes of aperiodic behavior, interupted by some intervals where most starting values 
@@ -46,16 +55,16 @@ def logistic_map_fixed_points(P, n_equilibration_steps=1000, n_sampling_steps=10
         fixed_points = [0.6623452662682413]
     else:  # Periodic or chaotic
         x = 0.5
-        V = {'x': x}
+        V = x
 
         # First, we run 1000 iteration to give the system a chance to settle
         for i in range(n_equilibration_steps):
-            V = logistic_map(P, V)
+            V = logistic_map(V, **P)
 
         # Determine number of unique points we encounter in the subsequent `n_sampling_steps`
         for i in range(n_sampling_steps):
-            V = logistic_map(P, V)
-            x = V['x']
+            V = logistic_map(V, **P)
+            x = V
 
             # Check whether, up to numerical accuracy, our new $x$ is already in this array.
             x_in_fixed_points = False
