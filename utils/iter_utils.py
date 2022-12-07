@@ -1,16 +1,13 @@
+import numpy as np
 from typing import Callable
 
 
-def iterate(map: Callable, P: dict, V: dict=None, n=0) -> dict:
+def iterate(func: Callable, V: np.array, n: int = 0, **P) -> np.array:
 
-    if not V or n<1:
-        return {}    
-    else:
-        # init trajectories with start value at t=0
-        trajectories = { key: [value] for key, value in V.items()}
-        for _ in range(n-1):
-            V_hat = map(P, V)
-            for key, value in V_hat.items():
-                trajectories[key].append(value)
-            V = V_hat
-        return trajectories
+    if not isinstance(V, np.ndarray):
+        return iterate(func, np.array(V), n, **P)
+    else:    
+        trajectory = [V]
+        for t in range(1,n):
+            trajectory.append(func(trajectory[-1], **P))
+        return np.array(trajectory)
